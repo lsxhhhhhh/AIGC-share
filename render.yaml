@@ -1,0 +1,20 @@
+# Render 部署蓝图（Blueprint）
+# 用法：Render 控制台 → New + → Blueprint → 选择本仓库 → 确认即可。
+# 之后每次 git push 到 main 分支会自动重新部署（autoDeploy: true）。
+services:
+  - type: web
+    name: aigc-share
+    runtime: node
+    plan: free
+    # 区域可选：singapore（离国内较近）/ oregon / frankfurt 等
+    region: singapore
+    branch: main
+    rootDir: "."
+    autoDeploy: true
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Render 会自动注入 PORT；serve.mjs 已按 process.env.PORT 监听 0.0.0.0
